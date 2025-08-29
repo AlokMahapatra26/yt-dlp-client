@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>yt-dlp Web GUI</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 40px auto; }
+    input, select, button { margin: 8px 0; padding: 8px; width: 100%; }
+  </style>
+</head>
+<body>
+  <h2>yt-dlp Web GUI</h2>
+  <form id="downloadForm">
+    <input type="text" id="url" placeholder="Enter YouTube URL" required />
+    <select id="format">
+      <option value="bestvideo+bestaudio/best">Best Quality</option>
+      <option value="bestvideo[height<=1080]+bestaudio/best">1080p</option>
+      <option value="bestvideo[height<=720]+bestaudio/best">720p</option>
+    </select>
+    <button type="submit">Download</button>
+  </form>
+  <p id="status"></p>
+
+  <script>
+    document.getElementById("downloadForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const url = document.getElementById("url").value;
+      const format = document.getElementById("format").value;
+      document.getElementById("status").textContent = "Downloading...";
+
+      const res = await fetch("/download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url, format })
+      });
+
+      const data = await res.json();
+      document.getElementById("status").textContent = data.message || data.error;
+    });
+  </script>
+</body>
+</html>
