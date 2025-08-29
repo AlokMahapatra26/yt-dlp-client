@@ -5,6 +5,8 @@
   <style>
     body { font-family: sans-serif; max-width: 600px; margin: 40px auto; }
     input, select, button { margin: 8px 0; padding: 8px; width: 100%; }
+    .progress { width: 100%; background: #ddd; height: 20px; border-radius: 4px; margin-top: 10px; }
+    .progress-bar { height: 100%; width: 0%; background: green; border-radius: 4px; text-align: center; color: white; font-size: 12px; }
   </style>
 </head>
 <body>
@@ -18,23 +20,39 @@
     </select>
     <button type="submit">Download</button>
   </form>
+
+  <div class="progress">
+    <div class="progress-bar" id="progress-bar">0%</div>
+  </div>
+
   <p id="status"></p>
 
   <script>
+    // Listen for progress updates
+    const evtSource = new EventSource("/progress");
+    evtSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.progress) {
+        const bar = document.getElementById("progress-bar");
+        bar.style.width = data.progress + "%";
+        bar.textContent = data.progress + "%";
+      }
+      if (data.done) {
+        document.getElementById("status").textContent = "Download complete!";
+      }
+    };
+
     document.getElementById("downloadForm").addEventListener("submit", async (e) => {
       e.preventDefault();
+      document.getElementById("status").textContent = "Starting download...";
       const url = document.getElementById("url").value;
       const format = document.getElementById("format").value;
-      document.getElementById("status").textContent = "Downloading...";
 
-      const res = await fetch("/download", {
+      await fetch("/download", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url, format })
       });
-
-      const data = await res.json();
-      document.getElementById("status").textContent = data.message || data.error;
     });
   </script>
 </body>
