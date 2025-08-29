@@ -82,7 +82,7 @@ app.post("/download", (req, res) => {
         "-f", "bestaudio/best",
         "--extract-audio",
         "--audio-format", "mp3",
-        "--audio-quality", audioQuality || "192K",
+        "--audio-quality", audioQuality || "256K",
         "-o", "downloads/%(title)s.%(ext)s",
         url,
       ];

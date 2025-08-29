@@ -7,7 +7,7 @@ A minimalist,  web interface for yt-dlp video downloader. Download videos and au
 - **📺 Multiple Resolutions**: 144p to 8K (4320p) video downloads
 - **🎵 Audio Extraction**: Download as MP3 with quality options (128K-320K)
 - **📊 Real-time Progress**: Live download progress tracking
-- **🌐 Cross-platform**: Windows and Linux  
+- **🌐 Cross-platform**: Windows,Linux and Mac 
 - **📦 Zero Dependencies**: Includes yt-dlp binaries - no installation needed
 
 
